@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y \
     postgresql-contrib \
     && rm -rf /var/lib/apt/lists/*
 
-# Copia scripts SQL personalizados si los tienes
-# COPY ./init-scripts/ /docker-entrypoint-initdb.d/
+# Copia el script de inicialización SQL para crear la base de datos Gatitos
+COPY ./init-scripts/ /docker-entrypoint-initdb.d/
 
 # Establece la zona horaria de Colombia
 ENV TZ=America/Bogota
