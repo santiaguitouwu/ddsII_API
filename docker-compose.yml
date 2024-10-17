@@ -14,5 +14,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  web:
+    build: .
+    container_name: django_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgres://postgres:root@postgres:5432/postgres
+
 volumes:
   postgres_data:
