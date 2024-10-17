@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core',
     'core.user',
     'core.auth',
+    'core.pet',
     'rest_framework'
 ]
 
@@ -80,7 +81,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "gatitos",
+        'NAME': "postgres",
         'USER': "postgres",
         'PASSWORD': "root",
         'HOST': "localhost",
