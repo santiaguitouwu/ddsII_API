@@ -17,7 +17,14 @@ services:
   web:
     build: .
     container_name: django_web
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+              ./wait-for-it.sh 
+              sh -c "
+                python manage.py migrate && 
+                python manage.py shell < create_user.py && 
+                python manage.py runserver 0.0.0.0:8000
+              "
+
     volumes:
       - .:/app
     ports:
@@ -27,6 +34,8 @@ services:
     environment:
       - DEBUG=True
       - DATABASE_URL=postgres://postgres:root@postgres:5432/postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
 
 volumes:
   postgres_data:

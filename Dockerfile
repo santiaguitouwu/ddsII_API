@@ -1,20 +1,21 @@
-# Usa una imagen oficial de Python como base
 FROM python:3.11
 
-# Establece el directorio de trabajo dentro del contenedor
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia el archivo de requisitos a la imagen
-COPY requirements.txt /app/
+# Copiar requirements.txt y instalar dependencias
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Instala las dependencias
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y postgresql-client
+# Copiar el resto del código de la aplicación
+COPY . .
 
-# Copia el resto del proyecto al contenedor
-COPY . /app/
+# Asegúrate de que wait-for-it.sh esté en el contenedor
+COPY wait-for-it.sh .
 
-# Expone el puerto en el que corre la aplicación Django (8000)
-EXPOSE 8000
+# Hacer wait-for-it.sh ejecutable
+RUN chmod +x wait-for-it.sh
 
-# Comando para ejecutar las migraciones y luego levantar el servidor
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+# Comando por defecto
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:8000"]
